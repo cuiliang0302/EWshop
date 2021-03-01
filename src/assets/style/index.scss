@@ -1,0 +1,17 @@
+@import "./normalize.css";
+@import "./transition.scss";
+@import "./variables.scss";
+
+body {
+  min-width: 320px;
+  max-width: 560px;
+  margin: 0 auto;
+  width: 10rem;
+  box-sizing: border-box;
+
+  #app {
+    color: $color-primary;
+  }
+}
+
+
