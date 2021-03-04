@@ -4,7 +4,7 @@ export function request(config) {
   // 创建axios的实例
   const instance = axios.create({
     baseURL: 'https://api.shop.eduwork.cn',
-    timeout: 10000
+    timeout: 50000
   })
   // 请求拦截器配置
   instance.interceptors.request.use(config => {
@@ -20,6 +20,7 @@ export function request(config) {
     console.log(response)
     return response.data
   }, error => {
+    console.log(error)
     switch (error.response.status) {
       case 401:
         console.log("无权访问")

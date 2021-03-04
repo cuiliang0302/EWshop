@@ -14,10 +14,11 @@ export default {
   name: "Grid",
   setup() {
     const router = useRouter()
-    const viewDetail = (id) => {
+    const viewDetail = (detailId) => {
       // 点击跳转到商品详情页
-      console.log("点击的id", id)
-      router.push(`/detail/${id}`)
+      console.log("点击的id", detailId)
+      router.push(`/detail/${detailId}`)
+      // router.push({path: '/detail', query: {id}})
     }
     return {
       viewDetail
