@@ -4,7 +4,7 @@ import Detail from "@/views/Detail"
 import Category from "@/views/Category"
 import Shopcart from "@/views/Shopcart"
 import Profile from "@/views/Profile"
-
+import Test from "@/views/Test";
 const routes = [
   {
     path: '/',
@@ -15,7 +15,7 @@ const routes = [
     }
   },
   {
-    path: '/detail/:detailId',
+    path: '/detail/:id',
     name: 'Detail',
     component: Detail,
     meta: {
@@ -44,6 +44,14 @@ const routes = [
     component: Profile,
     meta: {
       title: '个人中心'
+    }
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: Test,
+    meta: {
+      title: '测试页'
     }
   }
 ]

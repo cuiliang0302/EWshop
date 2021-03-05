@@ -10,7 +10,9 @@ body {
   box-sizing: border-box;
 
   #app {
-    //color: $color-primary;
+    .van-tabs__content {
+      margin-bottom: 50px;
+    }
   }
 }
 
