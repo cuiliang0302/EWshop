@@ -1,36 +1,32 @@
 <template>
-  <h1>测试页</h1>
-  <van-list v-model:loading="state.loading" :finished="state.finished" finished-text="没有更多了" @load="onLoad">
-    <van-grid :column-num="2">
-      <van-grid-item v-for="item in state.list" :key="item" icon="photo-o" :text="item"/>
-    </van-grid>
-  </van-list>
+  <van-tabs v-model:active="active" sticky>
+    <van-tab title="标签 1">
+      <Testcom @onLoad="onLoad"></Testcom>
+    </van-tab>
+    <van-tab title="标签 2">
+      <Testcom @onLoad="onLoad"></Testcom>
+    </van-tab>
+  </van-tabs>
+
 </template>
 
 <script>
-import {reactive} from 'vue';
-import {Toast} from 'vant';
+import {ref} from 'vue';
+import Testcom from "@/components/Testcom";
 
 export default {
   name: "Test",
   setup() {
-    const state = reactive({
-      list: [],
-      loading: false,
-      finished: false,
-    });
-    let pageNum = 1
-
-    const onLoad = () => {
+    const active = ref(0);
+    const onLoad = (state) => {
       // 异步更新数据
       // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+      console.log("开始请求数据", state.pageNum)
       setTimeout(() => {
-        pageNum++
-        console.log('下一页', pageNum)
         for (let i = 0; i < 10; i++) {
-          state.list.push(state.list.length + 1);
+          state.list.push((state.list.length + 1).toString());
         }
-
+        state.pageNum++
         // 加载状态结束
         state.loading = false;
 
@@ -39,13 +35,14 @@ export default {
           state.finished = true;
         }
       }, 1000);
-    };
-
+    }
     return {
-      state,
-      onLoad,
+      active,onLoad,
     };
   },
+  components: {
+    Testcom,
+  }
 }
 </script>
 

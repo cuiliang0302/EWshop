@@ -3,8 +3,8 @@
   <van-pull-refresh v-model="state.loading" @refresh="onRefresh">
     <Banner :slides="slides"></Banner>
     <Grid :recommends="recommends" :columnNum="columnNum"></Grid>
-    <Tab :tabList="tabList" @click="clickTab" :goods="goods" :goodsList="goodsList"
-         :goodsColumn="goodsColumn" @child-event="onLoad"></Tab>
+    <Tab :tabList="tabList" @click="clickTab" :goodsList="goodsList"
+         :goodsColumn="goodsColumn" @onLoad="onLoad"></Tab>
   </van-pull-refresh>
   <Tabbar></Tabbar>
 </template>
@@ -25,16 +25,15 @@ export default {
   setup() {
     // 轮播图列表
     let slides = ref([])
-    // 首页推荐
+    // 首页推荐商品列表
     let recommends = ref([])
-    // 商品列表
-    let goods = ref([])
     // 推荐列表显示列数
     let columnNum = 4
     // Tab 标签商品列表
     let goodsList = ref([])
     // Tab 标签商品列数
     let goodsColumn = 2
+    // Tab 标签分类名
     let tabList = ['畅销', '新书', '精选']
     // 下拉刷新更多组件
     const state = reactive({
@@ -47,7 +46,6 @@ export default {
         console.log(response)
         recommends.value = response.goods.data.slice(0, 4)
         slides.value = response.slides
-        goods.value = response.goods.data
         goodsList.value = response.goods.data
         Toast('刷新成功');
         state.loading = false;
@@ -64,8 +62,7 @@ export default {
         console.log(response)
         recommends.value = response.goods.data.slice(0, 4)
         slides.value = response.slides
-        goods.value = response.goods.data
-        goodsList.value = response.goods.data
+        // goodsList.value = response.goods.data
       }).catch(error => {
         //发生错误时执行的代码
         console.log(error)
@@ -86,9 +83,20 @@ export default {
       })
     }
     // 上拉加载下一页数据
-    const onLoad = (pageNum) => {
-      console.log('收到数据了')
-      console.log(pageNum)
+    const onLoad = (tabState) => {
+      console.log('开始请求新数据', tabState.pageNum)
+      if (goodsList.value.length >= 30) {
+        tabState.finished = true;
+      }
+      getHomeAllData('sales', tabState.pageNum).then((response) => {
+        tabState.pageNum++
+        goodsList.value.push(...response.goods.data)
+        tabState.loading = false;
+      }).catch(error => {
+        //发生错误时执行的代码
+        console.log(error)
+        Toast.fail('服务器异常');
+      })
     }
 
     return {
@@ -96,7 +104,6 @@ export default {
       recommends,
       tabList,
       clickTab,
-      goods,
       columnNum,
       goodsList,
       goodsColumn,

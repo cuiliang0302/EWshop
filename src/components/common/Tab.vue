@@ -1,7 +1,7 @@
 <template>
   <van-tabs :active="active" @click="clickTab" sticky>
     <van-tab v-for="(item,index) in tabList" :key=index :title=item>
-      <van-list v-model:loading="state.loading" :finished="state.finished" finished-text="没有更多了" @load="onLoad">
+      <van-list v-model:loading="tabState.loading" :finished="tabState.finished" finished-text="没有更多了" @load="onLoad">
         <Grid :recommends="goodsList" :column-num="goodsColumn" :showInfo="showInfo"></Grid>
       </van-list>
     </van-tab>
@@ -22,11 +22,6 @@ export default {
         return [];
       }
     },
-    goods: {
-      type: Array, default() {
-        return []
-      }
-    },
     goodsList: {
       type: Array, default() {
         return []
@@ -45,17 +40,14 @@ export default {
     const clickTab = (title) => {
       emit('clickTab', title)
     }
-    const state = reactive({
-      list: [],
+    const tabState = reactive({
+      pageNum: 1,
       loading: false,
       finished: false,
     });
-    let pageNum = 1
     const onLoad = () => {
-      pageNum ++
-      console.log('获取下一页', pageNum)
-      emit('onLoad', pageNum)
-      console.log('传完页数了')
+      console.log('触发加载更多')
+      emit('onLoad', tabState)
     }
     // const onLoad = () => {
     //   // 异步更新数据
@@ -64,20 +56,20 @@ export default {
     //     pageNum++
     //     console.log('下一页', pageNum)
     //     for (let i = 0; i < 10; i++) {
-    //       state.list.push(state.list.length + 1);
+    //       tabState.list.push(tabState.list.length + 1);
     //     }
     //
     //     // 加载状态结束
-    //     state.loading = false;
+    //     tabState.loading = false;
     //
     //     // 数据全部加载完成
-    //     if (state.list.length >= 100) {
-    //       state.finished = true;
+    //     if (tabState.list.length >= 100) {
+    //       tabState.finished = true;
     //     }
     //   }, 1000);
     // };
     return {
-      active, clickTab, showInfo, state,
+      active, clickTab, showInfo, tabState,
       onLoad,
     };
   },
