@@ -1,10 +1,15 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Home from "@/views/Home.vue"
-import Detail from "@/views/Detail"
-import Category from "@/views/Category"
-import Shopcart from "@/views/Shopcart"
-import Profile from "@/views/Profile"
-import Test from "@/views/Test";
+import store from "@/store/index";
+import {Toast} from 'vant'
+
+const Home = () => import('@/views/Home.vue')
+const Detail = () => import("@/views/Detail")
+const Category = () => import("@/views/Category")
+const Shopcart = () => import("@/views/Shopcart")
+const Profile = () => import("@/views/Profile")
+const Register = () => import("@/views/Register")
+const Login = () => import("@/views/Login")
+const Test = () => import("@/views/Test")
 const routes = [
   {
     path: '/',
@@ -35,7 +40,8 @@ const routes = [
     name: 'Shopcart',
     component: Shopcart,
     meta: {
-      title: '购物车'
+      title: '购物车',
+      isAuth: true
     }
   },
   {
@@ -43,7 +49,24 @@ const routes = [
     name: 'Profile',
     component: Profile,
     meta: {
-      title: '个人中心'
+      title: '个人中心',
+      isAuth: true
+    }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+    meta: {
+      title: '用户注册'
+    }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    meta: {
+      title: '用户登录'
     }
   },
   {
@@ -63,7 +86,13 @@ const router = createRouter({
 // 路由导航守卫
 router.beforeEach((to, from, next) => {
   // to 访问的路径 from 从哪来 next 响应路径
-  next()
+
+  if (to.meta.isAuth && store.state.user.isLogin === false) {
+    Toast.fail('还未登录，跳转到登录页')
+    return next('/login')
+  } else {
+    next()
+  }
   document.title = to.meta.title
 })
 export default router
