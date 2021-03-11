@@ -3,6 +3,7 @@
       :title=title
       left-arrow
       @click-left="onClickLeft"
+      fixed
   />
 </template>
 

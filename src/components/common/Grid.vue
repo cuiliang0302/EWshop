@@ -1,7 +1,7 @@
 <template>
   <van-grid :border="false" :column-num="columnNum">
-    <van-grid-item v-for="item in recommends" :key="item.id" @click="viewDetail(item.id)">
-      <van-image :src="item.cover_url"/>
+    <van-grid-item v-for="item in recommends" :key="item.id" @click="viewDetail(item.id)" >
+      <van-image :src="item.cover_url" v-lazy="item.cover_url"/>
       <p>{{ item.title }}</p>
       <span v-if="showInfo">
         <van-icon name="gold-coin-o"/>{{ item.price }}

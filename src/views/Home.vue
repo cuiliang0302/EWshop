@@ -6,12 +6,13 @@
     <Tab :tabList="tabList" @click="clickTab" :goodsList="goodsList"
          :goodsColumn="goodsColumn" @onLoad="onLoad"></Tab>
   </van-pull-refresh>
+  <BackTop @backTop="backTop"></BackTop>
   <Tabbar></Tabbar>
 </template>
 
 <script>
 // @ is an alias to /src
-import {onMounted, reactive, ref} from 'vue'
+import {onMounted, reactive, ref, watchEffect} from 'vue'
 import {Toast} from 'vant'
 import {getHomeAllData} from '@/api/home'
 import Tabbar from "@/components/common/Tabbar"
@@ -19,6 +20,7 @@ import Navbar from "@/components/common/Navbar"
 import Banner from "@/components/home/Banner"
 import Grid from "@/components/common/Grid"
 import Tab from "@/components/common/Tab";
+import BackTop from "@/components/common/BackTop";
 
 export default {
   name: 'Home',
@@ -98,7 +100,13 @@ export default {
         Toast.fail('服务器异常');
       })
     }
-
+    // 回到顶部
+    const backTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+    }
     return {
       slides,
       recommends,
@@ -109,7 +117,8 @@ export default {
       goodsColumn,
       state,
       onRefresh,
-      onLoad
+      onLoad,
+      backTop
     }
   },
   components: {
@@ -117,7 +126,8 @@ export default {
     Banner,
     Grid,
     Tab,
-    Tabbar
+    Tabbar,
+    BackTop
   }
 }
 </script>

@@ -1,4 +1,6 @@
 import axios from 'axios'
+import {Toast} from "vant";
+import router from "@/router";
 
 export function request(config) {
   // 创建axios的实例
@@ -9,6 +11,10 @@ export function request(config) {
   // 请求拦截器配置
   instance.interceptors.request.use(config => {
       // config.headers.Authorization = window.sessionStorage.getItem('token')
+      const token = window.sessionStorage.getItem('token')
+      if (token) {
+        config.headers.Authorization = 'Bearer' + token
+      }
       return config
     }, error => {
       console.log(error)
@@ -20,10 +26,11 @@ export function request(config) {
     console.log(response)
     return response.data
   }, error => {
-    console.log(error)
+    console.log(error.response.data)
     switch (error.response.status) {
       case 401:
-        console.log("无权访问")
+        Toast.fail("您无权访问，请先登录")
+        router.push({path: '/login'})
         break
       case 403:
         console.log("token过期啦")
